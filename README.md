@@ -6,7 +6,7 @@ API Link: [Forpay](https://api.forpay.pro/docs/overview)
 ## Install
 
 ```
-pip install forpay_client
+pip install forpay-client
 ```
 
 ## Usage

@@ -1,1 +1,1 @@
-name = 'forpay_client'
+name = 'forpay-client'
