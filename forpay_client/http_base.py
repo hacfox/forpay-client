@@ -1,5 +1,6 @@
 import base64
 import hashlib
+import json
 import random
 import string
 import time
@@ -18,7 +19,7 @@ class HttpClientBase(object):
         self._private_key = private_key
 
     def _http_get(self, url, query_dict=None, proxies=None):
-        set_auth_header = self.__set_auth_header(query_dict)
+        set_auth_header = self.__set_auth_header(dict_param=query_dict)
 
         headers = {}
         headers.update(set_auth_header)
@@ -41,9 +42,9 @@ class HttpClientBase(object):
         return {}, False
 
     def _http_post(self, url, body_dict=None, proxies=None):
-        add_to_headers = self.__set_header(verb='POST', source_content=str(body_dict))
+        add_to_headers = self.__set_header('POST', json.dumps(body_dict))
 
-        headers = {}
+        headers = {"Content-Type": "application/raw"}
 
         headers.update(add_to_headers)
 
@@ -52,10 +53,9 @@ class HttpClientBase(object):
             req.proxies = proxies
             req.keep_alive = False
             response = req.post(url,
-                                data=body_dict,
+                                data=json.dumps(body_dict),
                                 headers=headers,
                                 timeout=5)
-
             if response.status_code in [200, 401]:
                 reply = response.json()
                 return reply, True
@@ -64,15 +64,15 @@ class HttpClientBase(object):
             print(e)
         return {}, False
 
-    def __set_auth_header(self, dict_param):
+    def __set_auth_header(self, verb='GET', dict_param=None):
         encode_params = ''
         if dict_param:
             sorted_dict = sorted(dict_param.items(), key=lambda d: d[0])
             encode_params = urlencode(sorted_dict).replace("+", "%20").replace("*", "%2A").replace("%7E", "~")
-        add_to_headers = self.__set_header(source_content=encode_params)
+        add_to_headers = self.__set_header(verb=verb, source_content=encode_params)
         return add_to_headers
 
-    def __set_header(self, verb='GET', source_content=''):
+    def __set_header(self, verb, source_content=''):
         timestamp_str = get_million_timestamp()
         nonce = generate_random_str()
 

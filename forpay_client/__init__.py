@@ -1,1 +1,1 @@
-name = 'forpay-client'
+__all__ = ['forpay_utils', 'http_base']
