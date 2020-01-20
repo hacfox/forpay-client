@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='forpay_client',
-    version='1.0.10',
+    version='1.0.11',
     description=(
         'Python sdk for Forpay system'
     ),
