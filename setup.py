@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='forpay_client',
-    version='1.0.11',
+    version='1.0.12',
     description=(
         'Python sdk for Forpay system'
     ),
@@ -15,7 +15,7 @@ setup(
     platforms=["python"],
     url='https://github.com/hacfox/forpay_client.git',
     install_requires=[
-        'pycrypto>=2.6.1',
+        'pycryptodome>=3.9.4',
         'requests>=2.22.0'
     ],
     classifiers=[
