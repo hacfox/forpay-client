@@ -13,9 +13,10 @@ from Crypto.Signature import PKCS1_v1_5
 
 
 class HttpClientBase(object):
-    def __init__(self, app_id, key_id, private_key):
+    def __init__(self, app_id, key_id, public_key, private_key):
         self._app_id = app_id
         self._key_id = key_id
+        self._public_key = public_key
         self._private_key = private_key
 
     def _http_get(self, url, query_dict=None, proxies=None):
@@ -77,23 +78,33 @@ class HttpClientBase(object):
         nonce = generate_random_str()
 
         b64md5 = get_b64md5(source_content)
-        signature = self.__sign(verb, str(timestamp_str), self._app_id, nonce, b64md5)
+        signature = sign(self._private_key, verb, str(timestamp_str), self._app_id, nonce, b64md5)
 
         auth = 'SHA256-RSA {}:{}'.format(self._key_id, signature)
         header = init_header(timestamp_str, self._app_id, nonce)
         header['Authorization'] = auth
         return header
 
-    def __sign(self, verb, timestamp_str, app_id, nonce, b64md5):
-        sign_str = verb + '\n' \
-                   + timestamp_str + '\n' \
-                   + app_id + '\n' \
-                   + nonce + '\n' \
-                   + b64md5
-        key = RSA.importKey(self._private_key)
-        signer = PKCS1_v1_5.new(key)
-        signature = signer.sign(SHA256.new(sign_str.encode("utf8")))
-        return base64.b64encode(signature).decode("utf8")
+
+def sign(private_key, verb, timestamp_str, app_id, nonce, b64md5):
+    sign_str = verb + '\n' \
+               + timestamp_str + '\n' \
+               + app_id + '\n' \
+               + nonce + '\n' \
+               + b64md5
+    key = RSA.importKey(private_key)
+    signer = PKCS1_v1_5.new(key)
+    signature = signer.sign(SHA256.new(sign_str.encode("utf8")))
+    return base64.b64encode(signature).decode('utf-8')
+
+
+def verify_sign(public_key, content, signature):
+    rsa_key = RSA.importKey(public_key)
+    signer = PKCS1_v1_5.new(rsa_key)
+    h = SHA256.new(content.encode('utf-8'))
+    if signer.verify(h, base64.b64decode(signature)):
+        return True
+    return False
 
 
 def init_header(timestamp_str, app_id, nonce):

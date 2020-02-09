@@ -1,19 +1,29 @@
 from setuptools import setup, find_packages
 
+NAME = 'forpay_client'
+VERSION = '1.0.13'
+AUTHOR = 'bozimeile'
+EMAIL = 'zz.hacfox@gmail.com'
+URL = 'https://github.com/hacfox/forpay_client.git'
+DESCRIPTION = 'The client module of Forpay Python sdk'
+
+desc_file = open("README.md")
+try:
+    LONG_DESCRIPTION = desc_file.read()
+finally:
+    desc_file.close()
+
 setup(
-    name='forpay_client',
-    version='1.0.12',
-    description=(
-        'Python sdk for Forpay system'
-    ),
-    author='bozimeile',
-    author_email='zz.hacfox@gmail.com',
-    maintainer='bozimeile',
-    maintainer_email='zz.hacfox@gmail.com',
+    name=NAME,
+    version=VERSION,
+    description=DESCRIPTION,
+    author=AUTHOR,
+    author_email=EMAIL,
     license='MIT License',
-    packages=find_packages(exclude=[]),
-    platforms=["python"],
-    url='https://github.com/hacfox/forpay_client.git',
+    packages=find_packages(exclude=['test*']),
+    platforms="any",
+    keywords=['forpay', 'forpay-client', 'sdk'],
+    url=URL,
     install_requires=[
         'pycryptodome>=3.9.4',
         'requests>=2.22.0'

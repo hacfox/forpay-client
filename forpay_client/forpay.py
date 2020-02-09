@@ -39,6 +39,16 @@ class ForPayClient(HttpClientBase):
         reply, err = self._http_post(get_url('/v1/withdraw'), body_dict=body_dict)
         return reply, err
 
+    def deposit(self, wallet_id, currency_id, amount, client_token):
+        body_dict = {
+            "wallet_id": wallet_id,
+            "currency_id": currency_id,
+            "amount": amount,
+            "client_token": client_token,
+        }
+        reply, err = self._http_post(get_url('/v1/deposit'), body_dict=body_dict)
+        return reply, err
+
     # def cancel_withdraw(self, transaction_id):
     #     body_dict = {
     #         "transaction_id": transaction_id

@@ -1,0 +1,3 @@
+2020-02-09 Version: 1.0.13
+- Add deposit api.
+- Add SHA256-RSA verify method
