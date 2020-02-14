@@ -1,4 +1,4 @@
-from forpay_client.http_base import HttpClientBase
+from .http_base import HttpClientBase
 
 API_URL = 'https://api.forpay.pro'
 
