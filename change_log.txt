@@ -1,6 +1,10 @@
+2020-02-20 Version: 1.0.20
+- Add parameter type check
+- Add deduction api
+
 2020-02-09 Version: 1.0.14
 - Configs can be obtained from environment configurations
 
 2020-02-09 Version: 1.0.13
-- Add deposit api.
+- Add deposit api
 - Add SHA256-RSA verify method
