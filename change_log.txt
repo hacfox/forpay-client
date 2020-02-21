@@ -1,3 +1,6 @@
+2020-02-20 Version: 1.0.21
+- Fix parameter type error
+
 2020-02-20 Version: 1.0.20
 - Add parameter type check
 - Add deduction api

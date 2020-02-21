@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 NAME = 'forpay_client'
-VERSION = '1.0.20'
+VERSION = '1.0.21'
 AUTHOR = 'bozimeile'
 EMAIL = 'zz.hacfox@gmail.com'
 URL = 'https://github.com/hacfox/forpay_client.git'
