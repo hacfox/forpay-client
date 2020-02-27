@@ -80,3 +80,9 @@ class ForPayClient(HttpClientBase):
 
         reply, err = self._http_post(get_url('/v1/deduction'), body_dict=body_dict)
         return reply, err
+
+    def sign(self, sign_str):
+        return self._sign(sign_str)
+
+    def verify_sign(self, content, sign_str):
+        return self._verify_sign(content, sign_str)

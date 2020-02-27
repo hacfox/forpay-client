@@ -9,15 +9,15 @@ from Crypto.PublicKey import RSA
 from Crypto.Signature import PKCS1_v1_5
 
 
-def sign(_private_key, sign_str):
-    key = RSA.importKey(_private_key)
+def sign(private_key, sign_str):
+    key = RSA.importKey(private_key)
     signer = PKCS1_v1_5.new(key)
     signature = signer.sign(SHA256.new(sign_str.encode("utf8")))
     return base64.b64encode(signature).decode('utf-8')
 
 
-def verify_sign(_public_key, content, signature):
-    rsa_key = RSA.importKey(_public_key)
+def verify_sign(public_key, content, signature):
+    rsa_key = RSA.importKey(public_key)
     signer = PKCS1_v1_5.new(rsa_key)
     h = SHA256.new(content.encode('utf-8'))
     if signer.verify(h, base64.b64decode(signature)):

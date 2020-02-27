@@ -1,10 +1,14 @@
+import base64
 import json
 import os
 from urllib.parse import urlencode
 
 import requests
+from Crypto.Hash import SHA256
+from Crypto.PublicKey import RSA
+from Crypto.Signature import PKCS1_v1_5
 
-from .helpers import get_million_timestamp, generate_random_str, get_b64md5, sign
+from .helpers import get_million_timestamp, generate_random_str, get_b64md5
 
 
 class HttpClientBase(object):
@@ -95,7 +99,7 @@ class HttpClientBase(object):
                    + nonce + '\n' \
                    + b64md5
 
-        signature = sign(self._private_key, sign_str)
+        signature = self._sign(sign_str)
 
         auth = 'SHA256-RSA {}:{}'.format(self._key_id, signature)
         header = self._init_header(timestamp_str, nonce)
@@ -109,3 +113,17 @@ class HttpClientBase(object):
             'X-Request-Nonce': str(nonce)
         }
         return header_dict
+
+    def _sign(self, sign_str):
+        key = RSA.importKey(self._private_key)
+        signer = PKCS1_v1_5.new(key)
+        signature = signer.sign(SHA256.new(sign_str.encode("utf8")))
+        return base64.b64encode(signature).decode('utf-8')
+
+    def _verify_sign(self, content, signature):
+        rsa_key = RSA.importKey(self._public_key)
+        signer = PKCS1_v1_5.new(rsa_key)
+        h = SHA256.new(content.encode('utf-8'))
+        if signer.verify(h, base64.b64decode(signature)):
+            return True
+        return False
